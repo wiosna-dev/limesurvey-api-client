@@ -1,5 +1,5 @@
 {
-    "name": "meritoo/limesurvey-api-client",
+    "name": "wiosna/limesurvey-api-client",
     "description": "Client of LimeSurvey API",
     "type": "library",
     "license": "MIT",
@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.6",
         "fguillot/json-rpc": "^1.2",
-        "meritoo/common-library": "~0.0.1"
+        "wiosna/common-library": "~0.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",

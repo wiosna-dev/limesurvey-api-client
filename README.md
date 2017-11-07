@@ -8,7 +8,7 @@ Client of the [LimeSurvey's API](https://manual.limesurvey.org/RemoteControl_2_A
 Run [Composer](https://getcomposer.org) to install this package in your project:
 
     ```bash
-    $ composer require meritoo/limesurvey-api-client
+    $ composer require wiosna/limesurvey-api-client
     ```
 
 > How to install Composer: https://getcomposer.org/download
