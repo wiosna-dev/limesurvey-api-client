@@ -33,5 +33,14 @@
         "psr-4": {
             "Meritoo\\LimeSurvey\\Test\\ApiClient\\": "tests/"
         }
-    }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wiosna-dev/common-library"
+        }
+    ]
 }
