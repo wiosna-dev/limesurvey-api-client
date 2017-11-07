@@ -40,7 +40,7 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testRunMethodWithEmptyArrayReturned()
     {
-        $rpcClient = $this->createMock(RpcClient::class);
+        $rpcClient = $this->getMock(RpcClient::class);
 
         $manager = $this
             ->getMockBuilder(JsonRpcClientManager::class)
@@ -68,8 +68,8 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testRunMethodWithRawDataReturned()
     {
-        $rpcClient = $this->createMock(RpcClient::class);
-        $manager = $this->createPartialMock(JsonRpcClientManager::class, ['getRpcClient']);
+        $rpcClient = $this->getMock(RpcClient::class);
+        $manager = $this->getMock(JsonRpcClientManager::class, ['getRpcClient'], [], '', false);
 
         $rpcClient
             ->expects(static::once())
@@ -87,10 +87,10 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testRunMethodWithException()
     {
-        $this->expectException(InvalidResultOfMethodRunException::class);
+        $this->setExpectedException(InvalidResultOfMethodRunException::class);
 
-        $manager = $this->createPartialMock(JsonRpcClientManager::class, ['getRpcClient']);
-        $rpcClient = $this->createMock(RpcClient::class);
+        $manager = $this->getMock(JsonRpcClientManager::class, ['getRpcClient'], [], '', false);
+        $rpcClient = $this->getMock(RpcClient::class);
 
         $rpcClient
             ->expects(self::once())

@@ -33,7 +33,7 @@ class MethodTypeTest extends BaseTypeTestCase
      */
     public function testGetValidatedMethodWithIncorrectMethod($incorrectMethod)
     {
-        $this->expectException(UnknownMethodException::class);
+        $this->setExpectedException(UnknownMethodException::class);
         MethodType::getValidatedMethod($incorrectMethod);
     }
 
@@ -52,7 +52,7 @@ class MethodTypeTest extends BaseTypeTestCase
      */
     public function testIsResultIterableWithIncorrectMethod($incorrectMethod)
     {
-        $this->expectException(UnknownMethodException::class);
+        $this->setExpectedException(UnknownMethodException::class);
         MethodType::isResultIterable($incorrectMethod);
     }
 

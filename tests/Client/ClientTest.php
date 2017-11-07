@@ -45,7 +45,7 @@ class ClientTest extends BaseTestCase
      */
     public function testRunWithIncorrectMethod($incorrectMethod)
     {
-        $this->expectException(UnknownMethodException::class);
+        $this->setExpectedException(UnknownMethodException::class);
 
         $client = new Client($this->configuration);
         $client->run($incorrectMethod);
@@ -61,8 +61,8 @@ class ClientTest extends BaseTestCase
      */
     public function testRun($method, $arguments, $debugMode, $expectedRawData)
     {
-        $sessionManager = $this->createMock(SessionManager::class);
-        $rpcClientManager = $this->createMock(JsonRpcClientManager::class);
+        $sessionManager = $this->getMock(SessionManager::class, [], [], '', false);
+        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $rpcClientManager
             ->expects(static::any())

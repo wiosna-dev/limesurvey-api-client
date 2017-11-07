@@ -128,7 +128,7 @@ class ResultTest extends BaseTestCase
 
     public function testGetDataUsingProcessedDataWhoCannotBeProcessed()
     {
-        $this->expectException(CannotProcessDataException::class);
+        $this->setExpectedException(CannotProcessDataException::class);
         $this->statusInsteadDataResult->getData();
     }
 

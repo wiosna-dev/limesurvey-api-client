@@ -52,19 +52,19 @@ class ParticipantsTest extends BaseTestCase
 
     public function testAdd()
     {
-        $this->expectException(DisabledMethodException::class);
+        $this->setExpectedException(DisabledMethodException::class);
         (new Participants())->add('');
     }
 
     public function testAddMultiple()
     {
-        $this->expectException(DisabledMethodException::class);
+        $this->setExpectedException(DisabledMethodException::class);
         (new Participants())->addMultiple([]);
     }
 
     public function testHas()
     {
-        $this->expectException(DisabledMethodException::class);
+        $this->setExpectedException(DisabledMethodException::class);
         (new Participants())->has(new Participant());
     }
 

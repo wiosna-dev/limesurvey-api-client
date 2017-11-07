@@ -112,9 +112,7 @@ class ParticipantServiceTest extends BaseTestCase
     public function testGetParticipantDetailsWithException()
     {
         $exception = new CannotProcessDataException(ReasonType::NOT_EXISTING_SURVEY_ID);
-
-        $this->expectException(CannotProcessDataException::class);
-        $this->expectExceptionMessage($exception->getMessage());
+        $this->setExpectedException(CannotProcessDataException::class, $exception->getMessage());
 
         $rpcClientManager = $this->getJsonRpcClientManagerWithException(1, $exception);
         $sessionManager = $this->getSessionManager();
@@ -158,7 +156,7 @@ class ParticipantServiceTest extends BaseTestCase
 
     public function testHasParticipantFilledSurveyWithoutParticipants()
     {
-        $this->expectException(MissingParticipantOfSurveyException::class);
+        $this->setExpectedException(MissingParticipantOfSurveyException::class);
 
         $rpcClientManager = $this->getJsonRpcClientManager(1);
         $sessionManager = $this->getSessionManager();
@@ -178,7 +176,7 @@ class ParticipantServiceTest extends BaseTestCase
 
     public function testHasParticipantFilledSurveyUsingNotExistingParticipant()
     {
-        $this->expectException(MissingParticipantOfSurveyException::class);
+        $this->setExpectedException(MissingParticipantOfSurveyException::class);
 
         $rpcClientManager = $this->getJsonRpcClientManager(1);
         $sessionManager = $this->getSessionManager();
@@ -253,7 +251,7 @@ class ParticipantServiceTest extends BaseTestCase
      */
     private function getSessionManager()
     {
-        return $this->createMock(SessionManager::class);
+        return $this->getMock(SessionManager::class, [], [], '', false);
     }
 
     /**
@@ -265,7 +263,7 @@ class ParticipantServiceTest extends BaseTestCase
      */
     private function getJsonRpcClientManager($runMethodCallCount, array $runMethodCallResults = [])
     {
-        $rpcClientManager = $this->createMock(JsonRpcClientManager::class);
+        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $mocker = $rpcClientManager
             ->expects(static::exactly($runMethodCallCount))
@@ -297,7 +295,7 @@ class ParticipantServiceTest extends BaseTestCase
      */
     private function getJsonRpcClientManagerWithException($runMethodCallCount, Exception $exception)
     {
-        $rpcClientManager = $this->createMock(JsonRpcClientManager::class);
+        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $rpcClientManager
             ->expects(static::exactly($runMethodCallCount))

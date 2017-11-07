@@ -44,19 +44,19 @@ class SurveysSummariesTest extends BaseTestCase
 
     public function testAdd()
     {
-        $this->expectException(DisabledMethodException::class);
+        $this->setExpectedException(DisabledMethodException::class);
         (new SurveysSummaries())->add('');
     }
 
     public function testAddMultiple()
     {
-        $this->expectException(DisabledMethodException::class);
+        $this->setExpectedException(DisabledMethodException::class);
         (new SurveysSummaries())->addMultiple([]);
     }
 
     public function testHas()
     {
-        $this->expectException(DisabledMethodException::class);
+        $this->setExpectedException(DisabledMethodException::class);
         (new SurveysSummaries())->has(new SurveySummary());
     }
 

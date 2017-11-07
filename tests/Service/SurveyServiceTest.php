@@ -100,7 +100,7 @@ class SurveyServiceTest extends BaseTestCase
 
     public function testGetAllSurveysWithNoTableException()
     {
-        $this->expectException(CannotProcessDataException::class);
+        $this->setExpectedException(CannotProcessDataException::class);
         $exception = new CannotProcessDataException(ReasonType::NO_TOKEN_TABLE);
 
         $rpcClientManager = $this->getJsonRpcClientManagerWithException(1, $exception);
@@ -224,9 +224,7 @@ class SurveyServiceTest extends BaseTestCase
     public function testGetSurveyParticipantsWithNotExistingSurveyException()
     {
         $exception = new CannotProcessDataException(ReasonType::NOT_EXISTING_SURVEY_ID);
-
-        $this->expectException(CannotProcessDataException::class);
-        $this->expectExceptionMessage($exception->getMessage());
+        $this->setExpectedException(CannotProcessDataException::class, $exception->getMessage());
 
         $runMethodCallResults = [
             [
@@ -332,7 +330,7 @@ class SurveyServiceTest extends BaseTestCase
 
     public function testGetSurveyParticipantsWithNoTableException()
     {
-        $this->expectException(CannotProcessDataException::class);
+        $this->setExpectedException(CannotProcessDataException::class);
         $exception = new CannotProcessDataException(ReasonType::NO_TOKEN_TABLE);
 
         $rpcClientManager = $this->getJsonRpcClientManagerWithException(1, $exception);
@@ -344,7 +342,7 @@ class SurveyServiceTest extends BaseTestCase
 
     public function testGetSurveyParticipantsWithNoParticipantsException()
     {
-        $this->expectException(CannotProcessDataException::class);
+        $this->setExpectedException(CannotProcessDataException::class);
         $exception = new CannotProcessDataException(ReasonType::NO_PARTICIPANTS_FOUND);
 
         $rpcClientManager = $this->getJsonRpcClientManagerWithException(1, $exception);
@@ -356,7 +354,7 @@ class SurveyServiceTest extends BaseTestCase
 
     public function testAddParticipantForNotExistingSurvey()
     {
-        $this->expectException(CannotProcessDataException::class);
+        $this->setExpectedException(CannotProcessDataException::class);
         $exception = new CannotProcessDataException(ReasonType::NOT_EXISTING_SURVEY_ID);
 
         $rpcClientManager = $this->getJsonRpcClientManagerWithException(1, $exception);
@@ -466,7 +464,7 @@ class SurveyServiceTest extends BaseTestCase
 
     public function testGetSurveyTokenCountWithException()
     {
-        $this->expectException(MissingSurveySummaryException::class);
+        $this->setExpectedException(MissingSurveySummaryException::class);
 
         $runMethodCallResults = [
             null,
@@ -496,7 +494,7 @@ class SurveyServiceTest extends BaseTestCase
      */
     private function getSessionManager()
     {
-        return $this->createMock(SessionManager::class);
+        return $this->getMock(SessionManager::class, [], [], '', false);
     }
 
     /**
@@ -508,7 +506,7 @@ class SurveyServiceTest extends BaseTestCase
      */
     private function getJsonRpcClientManager($runMethodCallCount, array $runMethodCallResults = [])
     {
-        $rpcClientManager = $this->createMock(JsonRpcClientManager::class);
+        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $mocker = $rpcClientManager
             ->expects(static::exactly($runMethodCallCount))
@@ -540,7 +538,7 @@ class SurveyServiceTest extends BaseTestCase
      */
     private function getJsonRpcClientManagerWithException($runMethodCallCount, Exception $exception)
     {
-        $rpcClientManager = $this->createMock(JsonRpcClientManager::class);
+        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $rpcClientManager
             ->expects(static::exactly($runMethodCallCount))

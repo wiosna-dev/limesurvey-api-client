@@ -29,10 +29,9 @@ class SessionManagerTest extends BaseTestCase
 
     public function testGetSessionKeyWhenFailedWithoutReason()
     {
-        $this->expectException(CreateSessionKeyFailedException::class);
-        $this->expectExceptionMessage('Create of the session key has failed');
+        $this->setExpectedException(CreateSessionKeyFailedException::class, 'Create of the session key has failed');
 
-        $clientManager = $this->createMock(JsonRpcClientManager::class);
+        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $clientManager
             ->expects(static::any())
@@ -46,10 +45,10 @@ class SessionManagerTest extends BaseTestCase
     {
         $reason = 'Invalid credentials';
 
-        $this->expectException(CreateSessionKeyFailedException::class);
-        $this->expectExceptionMessage(sprintf('Create of the session key has failed. Reason: \'%s\'.', $reason));
+        $message = sprintf('Create of the session key has failed. Reason: \'%s\'.', $reason);
+        $this->setExpectedException(CreateSessionKeyFailedException::class, $message);
 
-        $clientManager = $this->createMock(JsonRpcClientManager::class);
+        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $clientManager
             ->expects(static::any())
@@ -63,7 +62,7 @@ class SessionManagerTest extends BaseTestCase
 
     public function testGetSessionKey()
     {
-        $clientManager = $this->createMock(JsonRpcClientManager::class);
+        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $clientManager
             ->expects(static::any())
@@ -76,7 +75,7 @@ class SessionManagerTest extends BaseTestCase
 
     public function testReleaseSessionKey()
     {
-        $clientManager = $this->createMock(JsonRpcClientManager::class);
+        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
 
         $clientManager
             ->expects(static::any())

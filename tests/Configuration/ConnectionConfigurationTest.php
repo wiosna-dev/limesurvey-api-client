@@ -47,7 +47,7 @@ class ConnectionConfigurationTest extends BaseTestCase
      */
     public function testConstructorWithEmptyBaseUrl($emptyBaseUrl)
     {
-        $this->expectException(InvalidUrlException::class);
+        $this->setExpectedException(InvalidUrlException::class);
         new ConnectionConfiguration($emptyBaseUrl, '', '');
     }
 
@@ -57,7 +57,7 @@ class ConnectionConfigurationTest extends BaseTestCase
      */
     public function testConstructorWithInvalidBaseUrl($invalidBaseUrl)
     {
-        $this->expectException(InvalidUrlException::class);
+        $this->setExpectedException(InvalidUrlException::class);
         new ConnectionConfiguration($invalidBaseUrl, '', '');
     }
 
