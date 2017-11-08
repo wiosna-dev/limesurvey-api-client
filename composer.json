@@ -1,5 +1,5 @@
 {
-    "name": "wiosna/limesurvey-api-client",
+    "name": "wiosna-dev/limesurvey-api-client",
     "description": "Client of LimeSurvey API",
     "type": "library",
     "license": "MIT",
@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.5.9",
         "fguillot/json-rpc": "^1.2",
-        "wiosna/common-library": "~0.0.1"
+        "wiosna-dev/common-library": "0.0.17"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.2",

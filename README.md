@@ -5,10 +5,22 @@ Client of the [LimeSurvey's API](https://manual.limesurvey.org/RemoteControl_2_A
 
 ## Installation
 
+In your `composer.json` add address of repository into `repositories` section:
+
+```json
+"repositories": [
+    (...)
+    {
+        "type": "vcs",
+        "url": "https://github.com/wiosna-dev/limesurvey-api-client"
+    }
+]
+```
+
 Run [Composer](https://getcomposer.org) to install this package in your project:
 
     ```bash
-    $ composer require wiosna/limesurvey-api-client
+    $ composer require wiosna-dev/limesurvey-api-client
     ```
 
 > How to install Composer: https://getcomposer.org/download
