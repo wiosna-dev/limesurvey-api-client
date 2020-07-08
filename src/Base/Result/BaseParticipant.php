@@ -40,6 +40,13 @@ abstract class BaseParticipant extends BaseItem
     protected $email;
 
     /**
+     * Token of the participant
+     *
+     * @var string
+     */
+    protected $token;
+
+    /**
      * Returns ID of the participant
      *
      * @return int
@@ -77,5 +84,15 @@ abstract class BaseParticipant extends BaseItem
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Returns token of the participant
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 }

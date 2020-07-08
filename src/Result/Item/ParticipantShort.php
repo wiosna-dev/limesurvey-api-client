@@ -28,6 +28,10 @@ class ParticipantShort extends BaseParticipant
                 $this->id = (int)$value;
                 break;
 
+            case 'token':
+                $this->token = trim($value);
+                break;
+
             case 'participant_info':
                 $this->firstName = trim($value['firstname']);
                 $this->lastName = trim($value['lastname']);
@@ -52,6 +56,7 @@ class ParticipantShort extends BaseParticipant
 
         $data = [
             'tid'              => $participant->getId(),
+            'token'            => $participant->getToken(),
             'participant_info' => $info,
         ];
 
