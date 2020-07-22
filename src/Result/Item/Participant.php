@@ -43,13 +43,6 @@ class Participant extends BaseParticipant
     private $emailStatus;
 
     /**
-     * Token of the participant
-     *
-     * @var string
-     */
-    private $token;
-
-    /**
      * Language of the participant
      *
      * @var string
@@ -230,16 +223,6 @@ class Participant extends BaseParticipant
     public function getEmailStatus()
     {
         return $this->emailStatus;
-    }
-
-    /**
-     * Returns token of the participant
-     *
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
     }
 
     /**

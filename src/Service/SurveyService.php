@@ -228,7 +228,7 @@ class SurveyService
      *
      * @throws CannotProcessDataException
      */
-    public function getSurveyParticipants($surveyId, $onlyCompleted = false)
+    public function getSurveyParticipants($surveyId, $onlyCompleted = false, array $criteria = [])
     {
         $hasSurvey = $this
             ->allParticipants
@@ -244,6 +244,8 @@ class SurveyService
                 $offset,
                 $limit,
                 $includeUnused,
+                $attributes = false,
+                $criteria
             ];
 
             try {
