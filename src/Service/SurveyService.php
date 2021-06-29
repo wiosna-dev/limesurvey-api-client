@@ -421,4 +421,40 @@ class SurveyService
 
         return $surveySummary;
     }
+
+    /**
+     * @param $surveyId
+     * @param $email
+     * @return bool
+     * @throws CannotProcessDataException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
+     */
+    public function hasSurveyBeenCompletedByEmail($surveyId, $email)
+    {
+        $arguments = [
+            $surveyId,
+            $offset = 0,
+            $limit = 1,
+            $includeUnused = false,
+            $attributes = false,
+            ['email' => $email]
+        ];
+
+        try {
+            /** @var Collection $participants */
+            $participants = $this
+                ->client
+                ->run(MethodType::LIST_PARTICIPANTS, $arguments)
+                ->getData();
+
+            return $participants->count() > 0;
+        } catch (CannotProcessDataException $exception) {
+            if (ReasonType::NO_PARTICIPANTS_FOUND !== $exception->getReason()) {
+                throw $exception;
+            }
+        }
+
+        return false;
+    }
 }
