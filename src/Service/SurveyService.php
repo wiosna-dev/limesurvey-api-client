@@ -231,7 +231,6 @@ class SurveyService
      * @param int $surveyId ID of survey
      * @param bool $onlyCompleted (optional) If is set to true, participants who completed survey are returned only.
      *                            Otherwise - all (default behaviour).
-     * @param array $criteria
      * @return Collection
      *
      * @throws CannotProcessDataException
@@ -239,7 +238,7 @@ class SurveyService
      * @throws UnknownInstanceOfResultItem
      * @throws UnknownMethodException
      */
-    public function getSurveyParticipants($surveyId, $onlyCompleted = false, array $criteria = [])
+    public function getSurveyParticipants($surveyId, $onlyCompleted = false)
     {
         $hasSurvey = $this
             ->allParticipants
@@ -255,8 +254,6 @@ class SurveyService
                 $offset,
                 $limit,
                 $includeUnused,
-                $attributes = false,
-                $criteria
             ];
 
             try {
