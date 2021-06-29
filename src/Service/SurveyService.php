@@ -12,6 +12,8 @@ use Meritoo\Common\Collection\Collection;
 use Meritoo\LimeSurvey\ApiClient\Client\Client;
 use Meritoo\LimeSurvey\ApiClient\Exception\CannotProcessDataException;
 use Meritoo\LimeSurvey\ApiClient\Exception\MissingSurveySummaryException;
+use Meritoo\LimeSurvey\ApiClient\Exception\UnknownInstanceOfResultItem;
+use Meritoo\LimeSurvey\ApiClient\Exception\UnknownMethodException;
 use Meritoo\LimeSurvey\ApiClient\Result\Collection\Participants;
 use Meritoo\LimeSurvey\ApiClient\Result\Collection\Surveys;
 use Meritoo\LimeSurvey\ApiClient\Result\Collection\SurveysSummaries;
@@ -126,6 +128,8 @@ class SurveyService
      * @return Surveys
      *
      * @throws CannotProcessDataException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     public function getAllSurveys($onlyActive = false)
     {
@@ -160,10 +164,13 @@ class SurveyService
     /**
      * Returns information if survey with given ID exists
      *
-     * @param int  $surveyId       ID of survey to verify
+     * @param int $surveyId ID of survey to verify
      * @param bool $shouldBeActive (optional) If is set to true, survey should be active. If it's not, it shouldn't
      *                             be returned, even if exists. Otherwise - it doesn't matter (default behaviour).
      * @return bool
+     * @throws CannotProcessDataException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     public function isExistingSurvey($surveyId, $shouldBeActive = false)
     {
@@ -221,12 +228,16 @@ class SurveyService
     /**
      * Returns participants of given survey
      *
-     * @param int  $surveyId      ID of survey
+     * @param int $surveyId ID of survey
      * @param bool $onlyCompleted (optional) If is set to true, participants who completed survey are returned only.
      *                            Otherwise - all (default behaviour).
+     * @param array $criteria
      * @return Collection
      *
      * @throws CannotProcessDataException
+     * @throws MissingSurveySummaryException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     public function getSurveyParticipants($surveyId, $onlyCompleted = false, array $criteria = [])
     {
@@ -277,11 +288,14 @@ class SurveyService
     /**
      * Adds participant with given data to survey with given ID
      *
-     * @param int    $surveyId  ID of survey
+     * @param int $surveyId ID of survey
      * @param string $firstName First name of the participant to add
-     * @param string $lastName  Last ame of the participant to add
-     * @param string $email     E-mail address of the participant to add
+     * @param string $lastName Last ame of the participant to add
+     * @param string $email E-mail address of the participant to add
      * @return Participant
+     * @throws CannotProcessDataException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     public function addParticipant($surveyId, $firstName, $lastName, $email)
     {
@@ -320,9 +334,13 @@ class SurveyService
     /**
      * Returns short data of one participant with given e-mail (participant of given survey)
      *
-     * @param int    $surveyId ID of survey
-     * @param string $email    E-mail address of the participant
+     * @param int $surveyId ID of survey
+     * @param string $email E-mail address of the participant
      * @return ParticipantShort|null
+     * @throws CannotProcessDataException
+     * @throws MissingSurveySummaryException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     public function getParticipant($surveyId, $email)
     {
@@ -345,7 +363,10 @@ class SurveyService
      * @param int $surveyId ID of survey
      * @return int
      *
+     * @throws CannotProcessDataException
      * @throws MissingSurveySummaryException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     public function getSurveyTokenCount($surveyId)
     {
@@ -376,6 +397,9 @@ class SurveyService
      *
      * @param int $surveyId ID of survey
      * @return SurveySummary|null
+     * @throws CannotProcessDataException
+     * @throws UnknownInstanceOfResultItem
+     * @throws UnknownMethodException
      */
     private function getSurveySummary($surveyId)
     {
