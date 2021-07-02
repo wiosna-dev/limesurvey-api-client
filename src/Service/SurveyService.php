@@ -432,9 +432,9 @@ class SurveyService
         $arguments = [
             $surveyId,
             $offset = 0,
-            $limit = 1,
+            $limit = 10,
             $includeUnused = false,
-            $attributes = false,
+            ['completed'],
             ['email' => $email]
         ];
 
@@ -443,9 +443,13 @@ class SurveyService
             $participants = $this
                 ->client
                 ->run(MethodType::LIST_PARTICIPANTS, $arguments)
-                ->getData();
+                ->getData(true);
 
-            return $participants->count() > 0;
+            foreach ($participants as $participant) {
+                if ('N' !== $participant['completed']) {
+                    return true;
+                }
+            }
         } catch (CannotProcessDataException $exception) {
             if (ReasonType::NO_PARTICIPANTS_FOUND !== $exception->getReason()) {
                 throw $exception;
