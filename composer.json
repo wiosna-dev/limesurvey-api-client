@@ -39,7 +39,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/xevolic/common-library"
+            "url": "https://github.com/wiosna-dev/common-library"
         }
     ]
 }
