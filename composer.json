@@ -12,7 +12,7 @@
     "require": {
         "php": ">=5.6",
         "fguillot/json-rpc": "^1.2",
-        "meritoo/common-library": "^1.1"
+        "wiosna-dev/common-library": "dev-feature/UW-2934_Add_support_for_PHP_8.x"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.6",
@@ -35,5 +35,11 @@
     },
     "config": {
         "sort-packages": true
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wiosna-dev/common-library"
+        }
+    ]
 }
