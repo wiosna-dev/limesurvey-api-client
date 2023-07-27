@@ -458,4 +458,31 @@ class SurveyService
 
         return false;
     }
+
+    public function getResponseIds($surveyId, $token)
+    {
+        $arguments = [
+            $surveyId,
+            $token,
+        ];
+
+        return $this
+            ->client
+            ->run('get_response_ids', $arguments)
+            ->getData(true);
+    }
+
+    public function exportResponsesByToken($surveyId, $token)
+    {
+        $arguments = [
+            $surveyId,
+            'json',
+            $token,
+        ];
+
+        return $this
+            ->client
+            ->run('export_responses_by_token', $arguments)
+            ->getData(true);
+    }
 }
