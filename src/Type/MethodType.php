@@ -93,6 +93,10 @@ class MethodType extends BaseType
      */
     const LIST_USERS = 'list_users';
 
+    const EXPORT_RESPONSES_BY_TOKEN = 'export_responses_by_token';
+
+    const GET_RESPONSE_IDS = 'get_response_ids';
+
     /**
      * Returns validated name of method to call or throws an exception (if method is incorrect)
      *
