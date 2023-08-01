@@ -97,6 +97,8 @@ class MethodType extends BaseType
 
     const GET_RESPONSE_IDS = 'get_response_ids';
 
+    const EXPORT_UPLOADED_FILES_BY_TOKEN = 'get_uploaded_files';
+
     /**
      * Returns validated name of method to call or throws an exception (if method is incorrect)
      *
@@ -131,7 +133,8 @@ class MethodType extends BaseType
             static::LIST_SURVEYS,
             static::LIST_USERS,
             static::EXPORT_RESPONSES_BY_TOKEN,
-            static::GET_RESPONSE_IDS
+            static::GET_RESPONSE_IDS,
+            static::EXPORT_UPLOADED_FILES_BY_TOKEN
         ]);
     }
 }

@@ -485,4 +485,18 @@ class SurveyService
             ->run('export_responses_by_token', $arguments)
             ->getData(true);
     }
+
+    public function exportUploadedFilesByToken($surveyId, $token)
+    {
+        $arguments = [
+            $surveyId,
+            'json',
+            $token,
+        ];
+
+        return $this
+            ->client
+            ->run('get_uploaded_files', $arguments)
+            ->getData(true);
+    }
 }
