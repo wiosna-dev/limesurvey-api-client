@@ -23,6 +23,7 @@ use Meritoo\LimeSurvey\ApiClient\Result\Item\Survey;
 use Meritoo\LimeSurvey\ApiClient\Result\Item\SurveySummary;
 use Meritoo\LimeSurvey\ApiClient\Type\MethodType;
 use Meritoo\LimeSurvey\ApiClient\Type\ReasonType;
+use Meritoo\Common\Utilities\Date;
 
 /**
  * Service that serves surveys and participants of surveys
@@ -301,6 +302,7 @@ class SurveyService
                 'firstname' => $firstName,
                 'lastname'  => $lastName,
                 'email'     => $email,
+                'validfrom' => date('Y-m-d h:i:s'),
             ],
         ];
 
