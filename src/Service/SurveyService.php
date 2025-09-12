@@ -302,7 +302,7 @@ class SurveyService
                 'firstname' => $firstName,
                 'lastname'  => $lastName,
                 'email'     => $email,
-                'validfrom' => date('Y-m-d h:i:s'),
+                'validfrom' => date('Y-m-d H:i:s'),
             ],
         ];
 
