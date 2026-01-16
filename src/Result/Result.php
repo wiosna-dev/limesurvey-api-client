@@ -57,9 +57,14 @@ class Result
      *                        class constants.
      * @param array  $rawData Raw data returned by the LimeSurvey's API
      */
-    public function __construct($method, array $rawData)
+    public function __construct($method, $rawData)
     {
         $this->method = MethodType::getValidatedMethod($method);
+
+        if (true === is_string($rawData)) {
+            $rawData = base64_decode($rawData);
+            $rawData = json_decode($rawData, true);
+        }
         $this->setRawDataAndStatus($rawData);
     }
 
