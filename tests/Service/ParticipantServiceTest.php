@@ -23,7 +23,7 @@ use Meritoo\LimeSurvey\ApiClient\Result\Item\Participant;
 use Meritoo\LimeSurvey\ApiClient\Service\ParticipantService;
 use Meritoo\LimeSurvey\ApiClient\Type\ReasonType;
 use Meritoo\LimeSurvey\Test\ApiClient\Utilities\DateUtility;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test case of the service that serves participants
@@ -112,7 +112,8 @@ class ParticipantServiceTest extends BaseTestCase
     public function testGetParticipantDetailsWithException()
     {
         $exception = new CannotProcessDataException(ReasonType::NOT_EXISTING_SURVEY_ID);
-        $this->setExpectedException(CannotProcessDataException::class, $exception->getMessage());
+        $this->expectException(CannotProcessDataException::class);
+        $this->expectExceptionMessage($exception->getMessage());
 
         $rpcClientManager = $this->getJsonRpcClientManagerWithException(1, $exception);
         $sessionManager = $this->getSessionManager();
@@ -156,7 +157,7 @@ class ParticipantServiceTest extends BaseTestCase
 
     public function testHasParticipantFilledSurveyWithoutParticipants()
     {
-        $this->setExpectedException(MissingParticipantOfSurveyException::class);
+        $this->expectException(MissingParticipantOfSurveyException::class);
 
         $rpcClientManager = $this->getJsonRpcClientManager(1);
         $sessionManager = $this->getSessionManager();
@@ -176,7 +177,7 @@ class ParticipantServiceTest extends BaseTestCase
 
     public function testHasParticipantFilledSurveyUsingNotExistingParticipant()
     {
-        $this->setExpectedException(MissingParticipantOfSurveyException::class);
+        $this->expectException(MissingParticipantOfSurveyException::class);
 
         $rpcClientManager = $this->getJsonRpcClientManager(1);
         $sessionManager = $this->getSessionManager();
@@ -188,7 +189,7 @@ class ParticipantServiceTest extends BaseTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -247,11 +248,11 @@ class ParticipantServiceTest extends BaseTestCase
     /**
      * Returns manager of session started while connecting to LimeSurvey's API
      *
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getSessionManager()
     {
-        return $this->getMock(SessionManager::class, [], [], '', false);
+        return $this->getMockBuilder(SessionManager::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -259,11 +260,11 @@ class ParticipantServiceTest extends BaseTestCase
      *
      * @param int   $runMethodCallCount   Count of calls of the runMethod() method (who is mocked)
      * @param array $runMethodCallResults (optional) Results of calls of the runMethod() method (who is mocked)
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getJsonRpcClientManager($runMethodCallCount, array $runMethodCallResults = [])
     {
-        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
+        $rpcClientManager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->getMock();
 
         $mocker = $rpcClientManager
             ->expects(static::exactly($runMethodCallCount))
@@ -291,11 +292,11 @@ class ParticipantServiceTest extends BaseTestCase
      *
      * @param int       $runMethodCallCount Count of calls of the runMethod() method (who is mocked)
      * @param Exception $exception          The exception that should be thrown
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getJsonRpcClientManagerWithException($runMethodCallCount, Exception $exception)
     {
-        $rpcClientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
+        $rpcClientManager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->getMock();
 
         $rpcClientManager
             ->expects(static::exactly($runMethodCallCount))
@@ -308,10 +309,10 @@ class ParticipantServiceTest extends BaseTestCase
     /**
      * Creates instance of the tested service without participants
      *
-     * @param PHPUnit_Framework_MockObject_MockObject $rpcClientManager Manager of the JsonRPC client used while connecting to LimeSurvey's API
-     * @param PHPUnit_Framework_MockObject_MockObject $sessionManager   Manager of session started while connecting to LimeSurvey's API
+     * @param MockObject $rpcClientManager Manager of the JsonRPC client used while connecting to LimeSurvey's API
+     * @param MockObject $sessionManager   Manager of session started while connecting to LimeSurvey's API
      */
-    private function createServiceWithoutParticipants(PHPUnit_Framework_MockObject_MockObject $rpcClientManager, PHPUnit_Framework_MockObject_MockObject $sessionManager)
+    private function createServiceWithoutParticipants(MockObject $rpcClientManager, MockObject $sessionManager)
     {
         $configuration = $this->getConnectionConfiguration();
         $client = new Client($configuration, $rpcClientManager, $sessionManager);
@@ -321,10 +322,10 @@ class ParticipantServiceTest extends BaseTestCase
     /**
      * Creates instance of the tested service with participants
      *
-     * @param PHPUnit_Framework_MockObject_MockObject $rpcClientManager Manager of the JsonRPC client used while connecting to LimeSurvey's API
-     * @param PHPUnit_Framework_MockObject_MockObject $sessionManager   Manager of session started while connecting to LimeSurvey's API
+     * @param MockObject $rpcClientManager Manager of the JsonRPC client used while connecting to LimeSurvey's API
+     * @param MockObject $sessionManager   Manager of session started while connecting to LimeSurvey's API
      */
-    private function createServiceWithParticipants(PHPUnit_Framework_MockObject_MockObject $rpcClientManager, PHPUnit_Framework_MockObject_MockObject $sessionManager)
+    private function createServiceWithParticipants(MockObject $rpcClientManager, MockObject $sessionManager)
     {
         $configuration = $this->getConnectionConfiguration();
         $client = new Client($configuration, $rpcClientManager, $sessionManager);

@@ -40,14 +40,14 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testRunMethodWithEmptyArrayReturned()
     {
-        $rpcClient = $this->getMock(RpcClient::class);
+        $rpcClient = $this->createMock(RpcClient::class);
 
         $manager = $this
             ->getMockBuilder(JsonRpcClientManager::class)
             ->setConstructorArgs([
                 $this->configuration,
             ])
-            ->setMethods([
+            ->onlyMethods([
                 'getRpcClient',
             ])
             ->getMock();
@@ -68,8 +68,8 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testRunMethodWithRawDataReturned()
     {
-        $rpcClient = $this->getMock(RpcClient::class);
-        $manager = $this->getMock(JsonRpcClientManager::class, ['getRpcClient'], [], '', false);
+        $rpcClient = $this->createMock(RpcClient::class);
+        $manager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->onlyMethods(['getRpcClient'])->getMock();
 
         $rpcClient
             ->expects(static::once())
@@ -87,10 +87,10 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testRunMethodWithException()
     {
-        $this->setExpectedException(InvalidResultOfMethodRunException::class);
+        $this->expectException(InvalidResultOfMethodRunException::class);
 
-        $manager = $this->getMock(JsonRpcClientManager::class, ['getRpcClient'], [], '', false);
-        $rpcClient = $this->getMock(RpcClient::class);
+        $manager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->onlyMethods(['getRpcClient'])->getMock();
+        $rpcClient = $this->createMock(RpcClient::class);
 
         $rpcClient
             ->expects(self::once())
@@ -111,10 +111,53 @@ class JsonRpcClientManagerTest extends BaseTestCase
         static::assertMethodVisibilityAndArguments(JsonRpcClientManager::class, 'getRpcClient', OopVisibilityType::IS_PROTECTED);
     }
 
+    public function testGetRpcClientWithoutTimeoutsDoesNotTouchHttpClientDefaults()
+    {
+        $configuration = new ConnectionConfiguration('http://test.com', 'test', 'test');
+        $httpClient = $this->getHttpClientOfManager(new JsonRpcClientManager($configuration));
+
+        static::assertEquals(5, $this->getHttpClientProperty($httpClient, 'timeout'));
+        static::assertArrayNotHasKey(CURLOPT_TIMEOUT, $this->getHttpClientProperty($httpClient, 'options'));
+    }
+
+    public function testGetRpcClientAppliesConnectAndRequestTimeout()
+    {
+        $configuration = new ConnectionConfiguration('http://test.com', 'test', 'test', false, true, 2, 7);
+        $httpClient = $this->getHttpClientOfManager(new JsonRpcClientManager($configuration));
+
+        static::assertEquals(2, $this->getHttpClientProperty($httpClient, 'timeout'));
+        static::assertEquals(7, $this->getHttpClientProperty($httpClient, 'options')[CURLOPT_TIMEOUT]);
+    }
+
+    /**
+     * @param JsonRpcClientManager $manager
+     * @return \JsonRPC\HttpClient
+     */
+    private function getHttpClientOfManager(JsonRpcClientManager $manager)
+    {
+        $method = new \ReflectionMethod($manager, 'getRpcClient');
+        $method->setAccessible(true);
+
+        return $method->invoke($manager)->getHttpClient();
+    }
+
+    /**
+     * @param object $httpClient
+     * @param string $propertyName
+     * @return mixed
+     */
+    private function getHttpClientProperty($httpClient, $propertyName)
+    {
+        $property = new \ReflectionProperty($httpClient, $propertyName);
+        $property->setAccessible(true);
+
+        return $property->getValue($httpClient);
+    }
+
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->configuration = new ConnectionConfiguration('http://test.com', 'test', 'test');

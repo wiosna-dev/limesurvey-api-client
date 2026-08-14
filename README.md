@@ -133,6 +133,26 @@ If you want to verify if if the "debug" mode is turned on simply call the `\Meri
 $debugMode = $configuration->isDebugModeOn();
 ```
 
+## Timeouts
+
+By default, this client relies on the underlying `fguillot/json-rpc` HTTP client, which only sets a 5 seconds
+connect timeout (`CURLOPT_CONNECTTIMEOUT`) and applies **no limit at all** on the total duration of a request
+(there's no `CURLOPT_TIMEOUT`). This means a slow or unresponsive LimeSurvey instance can make a request hang for
+a very long time.
+
+You can pass your own connect timeout and request timeout (both in seconds) as the 6th and 7th argument of the
+`ConnectionConfiguration` constructor:
+
+```php
+use Meritoo\LimeSurvey\ApiClient\Configuration\ConnectionConfiguration;
+
+// connect timeout: 2s, request timeout (including reading the response): 5s
+$configuration = new ConnectionConfiguration('http://test.com', 'test', 'test', false, true, 2, 5);
+```
+
+If not provided (`null`, the default), the underlying HTTP client's defaults are used - i.e. the behaviour
+described above.
+
 ##  Getting data from result
 
 #### Verify if the result is empty

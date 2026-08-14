@@ -1,4 +1,4 @@
-FROM php:5.6-cli
+FROM php:8.2-cli
 MAINTAINER Meritoo <github@meritoo.pl>
 
 #
@@ -12,6 +12,8 @@ RUN apt-get update \
         unzip \
         zlib1g-dev \
         libicu-dev \
+        libzip-dev \
+        libonig-dev \
     && apt-get clean \
     && rm -rf \
         /var/lib/apt/lists/* \
@@ -30,10 +32,8 @@ RUN docker-php-ext-install \
 # PHP extensions (PECL):
 # - Xdebug
 #
-RUN pecl install \
-        xdebug-2.5.5 \
-    && docker-php-ext-enable \
-        xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
@@ -50,12 +50,6 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && "date"
 
 #
-# Phing
-#
-RUN pear channel-discover pear.phing.info \
-    && pear install [--alldeps] phing/phing
-
-#
 # Composer - environment variables:
 # - disable warning about running commands as root/super user
 # - disable automatic clearing of sudo sessions
@@ -66,24 +60,22 @@ RUN pear channel-discover pear.phing.info \
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 #
-# Composer + https://packagist.org/packages/hirak/prestissimo package
+# Composer (from official image)
 #
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('SHA384', 'composer-setup.php') === \
-        '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo \
-        'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && php -r "unlink('composer-setup.php');" \
-    && composer global require \
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+#
+# Phing (via Composer global)
+#
+RUN composer global require \
         --no-plugins \
         --no-scripts \
         --no-progress \
-        --no-suggest \
         --no-interaction \
         --prefer-dist \
         --optimize-autoloader \
         --classmap-authoritative \
-        hirak/prestissimo \
+        phing/phing:^3.0 \
     && rm -rf ~/.composer/cache/* \
     && composer clear-cache \
     && composer --version
@@ -98,6 +90,6 @@ RUN sed -i 's/^# export/export/g; \
 #
 # Use project-related binaries globally
 #
-ENV PATH="/project/vendor/bin:${PATH}"
+ENV PATH="/project/vendor/bin:/root/.composer/vendor/bin:${PATH}"
 
 WORKDIR /project

@@ -38,7 +38,7 @@ class ConnectionConfigurationTest extends BaseTestCase
 
     public function testConstructorVisibilityAndArguments()
     {
-        static::assertConstructorVisibilityAndArguments(ConnectionConfiguration::class, OopVisibilityType::IS_PUBLIC, 5, 3);
+        static::assertConstructorVisibilityAndArguments(ConnectionConfiguration::class, OopVisibilityType::IS_PUBLIC, 7, 3);
     }
 
     /**
@@ -47,7 +47,7 @@ class ConnectionConfigurationTest extends BaseTestCase
      */
     public function testConstructorWithEmptyBaseUrl($emptyBaseUrl)
     {
-        $this->setExpectedException(InvalidUrlException::class);
+        $this->expectException(InvalidUrlException::class);
         new ConnectionConfiguration($emptyBaseUrl, '', '');
     }
 
@@ -57,7 +57,7 @@ class ConnectionConfigurationTest extends BaseTestCase
      */
     public function testConstructorWithInvalidBaseUrl($invalidBaseUrl)
     {
-        $this->setExpectedException(InvalidUrlException::class);
+        $this->expectException(InvalidUrlException::class);
         new ConnectionConfiguration($invalidBaseUrl, '', '');
     }
 
@@ -68,12 +68,16 @@ class ConnectionConfigurationTest extends BaseTestCase
         static::assertEquals('test2', $this->configurationWithDefaults->getPassword());
         static::assertFalse($this->configurationWithDefaults->isDebugModeOn());
         static::assertTrue($this->configurationWithDefaults->isVerifySslCertificateOn());
+        static::assertNull($this->configurationWithDefaults->getConnectTimeout());
+        static::assertNull($this->configurationWithDefaults->getRequestTimeout());
 
         static::assertEquals('http://lets-test.com', $this->configurationAnother->getBaseUrl());
         static::assertEquals('test11', $this->configurationAnother->getUsername());
         static::assertEquals('test22', $this->configurationAnother->getPassword());
         static::assertTrue($this->configurationAnother->isDebugModeOn());
         static::assertFalse($this->configurationAnother->isVerifySslCertificateOn());
+        static::assertEquals(1, $this->configurationAnother->getConnectTimeout());
+        static::assertEquals(5, $this->configurationAnother->getRequestTimeout());
     }
 
     public function testGetRemoteControlUrl()
@@ -130,11 +134,11 @@ class ConnectionConfigurationTest extends BaseTestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->configurationWithDefaults = new ConnectionConfiguration('http://test.com', 'test1', 'test2');
-        $this->configurationAnother = new ConnectionConfiguration('http://lets-test.com/', 'test11', 'test22', true, false);
+        $this->configurationAnother = new ConnectionConfiguration('http://lets-test.com/', 'test11', 'test22', true, false, 1, 5);
     }
 }

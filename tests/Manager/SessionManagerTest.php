@@ -29,9 +29,10 @@ class SessionManagerTest extends BaseTestCase
 
     public function testGetSessionKeyWhenFailedWithoutReason()
     {
-        $this->setExpectedException(CreateSessionKeyFailedException::class, 'Create of the session key has failed');
+        $this->expectException(CreateSessionKeyFailedException::class);
+        $this->expectExceptionMessage('Create of the session key has failed');
 
-        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
+        $clientManager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->getMock();
 
         $clientManager
             ->expects(static::any())
@@ -46,9 +47,10 @@ class SessionManagerTest extends BaseTestCase
         $reason = 'Invalid credentials';
 
         $message = sprintf('Create of the session key has failed. Reason: \'%s\'.', $reason);
-        $this->setExpectedException(CreateSessionKeyFailedException::class, $message);
+        $this->expectException(CreateSessionKeyFailedException::class);
+        $this->expectExceptionMessage($message);
 
-        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
+        $clientManager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->getMock();
 
         $clientManager
             ->expects(static::any())
@@ -62,7 +64,7 @@ class SessionManagerTest extends BaseTestCase
 
     public function testGetSessionKey()
     {
-        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
+        $clientManager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->getMock();
 
         $clientManager
             ->expects(static::any())
@@ -75,7 +77,7 @@ class SessionManagerTest extends BaseTestCase
 
     public function testReleaseSessionKey()
     {
-        $clientManager = $this->getMock(JsonRpcClientManager::class, [], [], '', false);
+        $clientManager = $this->getMockBuilder(JsonRpcClientManager::class)->disableOriginalConstructor()->getMock();
 
         $clientManager
             ->expects(static::any())
