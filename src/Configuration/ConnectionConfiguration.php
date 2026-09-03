@@ -115,6 +115,15 @@ class ConnectionConfiguration
         $this->password = $password;
         $this->debugMode = $debugMode;
         $this->verifySslCertificate = $verifySslCertificate;
+
+        if (null !== $connectTimeout && (!is_int($connectTimeout) || $connectTimeout < 0)) {
+            throw new \InvalidArgumentException('Connect timeout must be an integer >= 0 or null.');
+        }
+
+        if (null !== $requestTimeout && (!is_int($requestTimeout) || $requestTimeout < 0)) {
+            throw new \InvalidArgumentException('Request timeout must be an integer >= 0 or null.');
+        }
+
         $this->connectTimeout = $connectTimeout;
         $this->requestTimeout = $requestTimeout;
     }
