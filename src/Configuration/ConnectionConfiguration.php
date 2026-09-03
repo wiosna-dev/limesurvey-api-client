@@ -8,6 +8,7 @@
 
 namespace Meritoo\LimeSurvey\ApiClient\Configuration;
 
+use InvalidArgumentException;
 use Meritoo\Common\Exception\Regex\InvalidUrlException;
 use Meritoo\Common\Utilities\Regex;
 
@@ -116,13 +117,8 @@ class ConnectionConfiguration
         $this->debugMode = $debugMode;
         $this->verifySslCertificate = $verifySslCertificate;
 
-        if (null !== $connectTimeout && (!is_int($connectTimeout) || $connectTimeout < 0)) {
-            throw new \InvalidArgumentException('Connect timeout must be an integer >= 0 or null.');
-        }
-
-        if (null !== $requestTimeout && (!is_int($requestTimeout) || $requestTimeout < 0)) {
-            throw new \InvalidArgumentException('Request timeout must be an integer >= 0 or null.');
-        }
+        $this->validateTimeout($connectTimeout, 'Connect');
+        $this->validateTimeout($requestTimeout, 'Request');
 
         $this->connectTimeout = $connectTimeout;
         $this->requestTimeout = $requestTimeout;
@@ -253,5 +249,19 @@ class ConnectionConfiguration
         $this->baseUrl = $baseUrl;
 
         return $this;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function validateTimeout($timeout, $name): void
+    {
+        if (null === $timeout) {
+            return;
+        }
+
+        if (!is_int($timeout) || $timeout < 0) {
+            throw new InvalidArgumentException(sprintf('%s timeout must be an integer >= 0 or null.', $name));
+        }
     }
 }
