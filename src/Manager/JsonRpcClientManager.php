@@ -120,8 +120,11 @@ class JsonRpcClientManager
              * `JsonRPC\HttpClient` doesn't set `CURLOPT_TIMEOUT` (limit of the whole request, including reading
              * the response) at all by default, so without this a slow/unresponsive LimeSurvey instance could hang
              * the request for a very long time.
+             *
+             * `CURLOPT_TIMEOUT` is only defined when ext-curl is loaded, so the option is skipped in stream-based
+             * environments to avoid a fatal error on the undefined constant.
              */
-            if (null !== $this->connectionConfiguration->getRequestTimeout()) {
+            if (null !== $this->connectionConfiguration->getRequestTimeout() && defined('CURLOPT_TIMEOUT')) {
                 $this
                     ->rpcClient
                     ->getHttpClient()

@@ -113,6 +113,10 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testGetRpcClientWithoutTimeoutsDoesNotTouchHttpClientDefaults()
     {
+        if (!extension_loaded('curl')) {
+            $this->markTestSkipped('ext-curl is required to assert CURLOPT_TIMEOUT options.');
+        }
+
         $configuration = new ConnectionConfiguration('http://test.com', 'test', 'test');
         $httpClient = $this->getHttpClientOfManager(new JsonRpcClientManager($configuration));
 
@@ -122,6 +126,10 @@ class JsonRpcClientManagerTest extends BaseTestCase
 
     public function testGetRpcClientAppliesConnectAndRequestTimeout()
     {
+        if (!extension_loaded('curl')) {
+            $this->markTestSkipped('ext-curl is required to assert CURLOPT_TIMEOUT options.');
+        }
+
         $configuration = new ConnectionConfiguration('http://test.com', 'test', 'test', false, true, 2, 7);
         $httpClient = $this->getHttpClientOfManager(new JsonRpcClientManager($configuration));
 
