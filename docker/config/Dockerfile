@@ -13,15 +13,11 @@ RUN apk add --update --no-cache \
         icu-dev \
         libzip-dev \
         oniguruma-dev \
-        php82-pecl-xdebug \
     && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && echo "${TIMEZONE}" > /etc/timezone
 
-RUN set -x \
-    && EXT_DIR="$(php -r 'echo PHP_EXTENSION_DIR;')" \
-    && ln -s /usr/lib/php82/modules/xdebug.so "${EXT_DIR}/xdebug.so"
-
-RUN apk add --update --no-cache --virtual .build-deps $PHPIZE_DEPS \
+RUN apk add --update --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
+    && pecl install xdebug \
     && docker-php-ext-install \
         zip \
         intl \
