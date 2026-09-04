@@ -82,7 +82,7 @@ class ResultProcessorTest extends BaseTestCase
 
     public function testRunWithUnknownResultClass()
     {
-        $this->setExpectedException(UnknownInstanceOfResultItem::class);
+        $this->expectException(UnknownInstanceOfResultItem::class);
 
         $rawData = [
             'lorem' => 'ipsum',

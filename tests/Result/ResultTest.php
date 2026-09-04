@@ -15,7 +15,7 @@ use Meritoo\LimeSurvey\ApiClient\Exception\CannotProcessDataException;
 use Meritoo\LimeSurvey\ApiClient\Result\Result;
 use Meritoo\LimeSurvey\ApiClient\Type\MethodType;
 use Meritoo\LimeSurvey\Test\ApiClient\Utilities\DateUtility;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test case of the result with data fetched while talking to the LimeSurvey's API
@@ -58,7 +58,7 @@ class ResultTest extends BaseTestCase
      * Result with empty data returned by the LimeSurvey's API.
      * Mock of the tested class.
      *
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $emptyDataResult;
 
@@ -66,7 +66,7 @@ class ResultTest extends BaseTestCase
      * Result with iterable, not empty data.
      * Mock of the tested class.
      *
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $iterableDataResult;
 
@@ -74,7 +74,7 @@ class ResultTest extends BaseTestCase
      * Result with not iterable, not empty data.
      * Mock of the tested class.
      *
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $notIterableDataResult;
 
@@ -128,7 +128,7 @@ class ResultTest extends BaseTestCase
 
     public function testGetDataUsingProcessedDataWhoCannotBeProcessed()
     {
-        $this->setExpectedException(CannotProcessDataException::class);
+        $this->expectException(CannotProcessDataException::class);
         $this->statusInsteadDataResult->getData();
     }
 
@@ -159,7 +159,7 @@ class ResultTest extends BaseTestCase
     /**
      * {@inheritdoc{
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->emptyData = [];

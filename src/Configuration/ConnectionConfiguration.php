@@ -8,6 +8,7 @@
 
 namespace Meritoo\LimeSurvey\ApiClient\Configuration;
 
+use InvalidArgumentException;
 use Meritoo\Common\Exception\Regex\InvalidUrlException;
 use Meritoo\Common\Utilities\Regex;
 
@@ -68,25 +69,59 @@ class ConnectionConfiguration
     private $verifySslCertificate = true;
 
     /**
+     * Maximum number of seconds allowed to establish the TCP connection to LimeSurvey's API.
+     * If null, the underlying HTTP client's default is used.
+     *
+     * @var int|null
+     */
+    private $connectTimeout;
+
+    /**
+     * Maximum number of seconds allowed for the whole request, including reading the response.
+     * If null, no limit is applied (the underlying HTTP client's default behaviour).
+     *
+     * @var int|null
+     */
+    private $requestTimeout;
+
+    /**
      * Class constructor
      *
-     * @param string $baseUrl              Base url. Protocol & domain.
-     * @param string $username             Name of user used to authenticate to LimeSurvey
-     * @param string $password             Password used to authenticate to LimeSurvey
-     * @param bool   $debugMode            (optional) If is set to true, the "debug" mode is turned on. Otherwise -
-     *                                     turned off.
-     * @param bool   $verifySslCertificate (optional) If is set to true, the SSL certificate verification is turned
-     *                                     on. Otherwise - turned off.
+     * @param string   $baseUrl              Base url. Protocol & domain.
+     * @param string   $username             Name of user used to authenticate to LimeSurvey
+     * @param string   $password             Password used to authenticate to LimeSurvey
+     * @param bool     $debugMode            (optional) If is set to true, the "debug" mode is turned on. Otherwise -
+     *                                       turned off.
+     * @param bool     $verifySslCertificate (optional) If is set to true, the SSL certificate verification is turned
+     *                                       on. Otherwise - turned off.
+     * @param int|null $connectTimeout       (optional) Maximum number of seconds allowed to establish the TCP
+     *                                       connection to LimeSurvey's API. If null (default), the underlying HTTP
+     *                                       client's default is used.
+     * @param int|null $requestTimeout       (optional) Maximum number of seconds allowed for the whole request,
+     *                                       including reading the response. If null (default), no limit is applied.
      * @throws InvalidUrlException
      */
-    public function __construct($baseUrl, $username, $password, $debugMode = false, $verifySslCertificate = true)
-    {
+    public function __construct(
+        $baseUrl,
+        $username,
+        $password,
+        $debugMode = false,
+        $verifySslCertificate = true,
+        $connectTimeout = null,
+        $requestTimeout = null
+    ) {
         $this->setBaseUrl($baseUrl);
 
         $this->username = $username;
         $this->password = $password;
         $this->debugMode = $debugMode;
         $this->verifySslCertificate = $verifySslCertificate;
+
+        $this->validateTimeout($connectTimeout, 'Connect');
+        $this->validateTimeout($requestTimeout, 'Request');
+
+        $this->connectTimeout = $connectTimeout;
+        $this->requestTimeout = $requestTimeout;
     }
 
     /**
@@ -163,6 +198,26 @@ class ConnectionConfiguration
     }
 
     /**
+     * Returns the maximum number of seconds allowed to establish the TCP connection to LimeSurvey's API
+     *
+     * @return int|null
+     */
+    public function getConnectTimeout()
+    {
+        return $this->connectTimeout;
+    }
+
+    /**
+     * Returns the maximum number of seconds allowed for the whole request, including reading the response
+     *
+     * @return int|null
+     */
+    public function getRequestTimeout()
+    {
+        return $this->requestTimeout;
+    }
+
+    /**
      * Returns full url of the LimeSurvey's API.
      * It's a base url with part related to remote control.
      *
@@ -194,5 +249,19 @@ class ConnectionConfiguration
         $this->baseUrl = $baseUrl;
 
         return $this;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function validateTimeout($timeout, $name): void
+    {
+        if (null === $timeout) {
+            return;
+        }
+
+        if (!is_int($timeout) || $timeout < 0) {
+            throw new InvalidArgumentException(sprintf('%s timeout must be an integer >= 0 or null.', $name));
+        }
     }
 }

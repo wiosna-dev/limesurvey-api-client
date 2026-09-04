@@ -100,6 +100,36 @@ class JsonRpcClientManager
                     ->getHttpClient()
                     ->withoutSslVerification();
             }
+
+            /*
+             * A custom connect timeout was requested?
+             *
+             * `JsonRPC\HttpClient::withTimeout()` sets `CURLOPT_CONNECTTIMEOUT` (and the equivalent stream
+             * context option), it does not limit the whole request.
+             */
+            if (null !== $this->connectionConfiguration->getConnectTimeout()) {
+                $this
+                    ->rpcClient
+                    ->getHttpClient()
+                    ->withTimeout($this->connectionConfiguration->getConnectTimeout());
+            }
+
+            /*
+             * A custom request timeout was requested?
+             *
+             * `JsonRPC\HttpClient` doesn't set `CURLOPT_TIMEOUT` (limit of the whole request, including reading
+             * the response) at all by default, so without this a slow/unresponsive LimeSurvey instance could hang
+             * the request for a very long time.
+             *
+             * `CURLOPT_TIMEOUT` is only defined when ext-curl is loaded, so the option is skipped in stream-based
+             * environments to avoid a fatal error on the undefined constant.
+             */
+            if (null !== $this->connectionConfiguration->getRequestTimeout() && defined('CURLOPT_TIMEOUT')) {
+                $this
+                    ->rpcClient
+                    ->getHttpClient()
+                    ->addOption(CURLOPT_TIMEOUT, $this->connectionConfiguration->getRequestTimeout());
+            }
         }
 
         return $this->rpcClient;
